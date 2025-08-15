@@ -6,14 +6,14 @@ const { payByWaafiPay } = require('../paymentEvc');
 exports.createDonation = async (req, res) => {
   try {
     const { user, donorPhone, amount } = req.body;
-    // const waafiResponse = await payByWaafiPay({
-    //       phone: donorPhone,
-    //       amount: amount,
-    //       merchantUid: process.env.merchantUid,
-    //       apiUserId: process.env.apiUserId,
-    //       apiKey: process.env.apiKey,
-    //     });
-    //     if (waafiResponse.status) {
+    const waafiResponse = await payByWaafiPay({
+          phone: donorPhone,
+          amount: amount,
+          merchantUid: process.env.merchantUid,
+          apiUserId: process.env.apiUserId,
+          apiKey: process.env.apiKey,
+        });
+        if (waafiResponse.status) {
             const userExists = await User.findById(user);
     if (!userExists) return res.status(404).json({ message: 'User not found' });
 
@@ -24,13 +24,13 @@ exports.createDonation = async (req, res) => {
     });
 
     res.status(201).json({ message: 'Donation created successfully', donation });
-        // }else{
-        //      // Handling payment failure
-        //   return res.status(400).send({
-        //     status: "failed",
-        //     message: `${waafiResponse.error}` ?? "Payment Failed Try Again",
-        //   });
-        // }
+        }else{
+             // Handling payment failure
+          return res.status(400).send({
+            status: "failed",
+            message: `${waafiResponse.error}` ?? "Payment Failed Try Again",
+          });
+        }
 
     
   } catch (err) {

@@ -5,24 +5,28 @@ exports.createChild = async (req, res) => {
   try {
     console.log(req.body)
     const {
-      name, age, gender, dateOfBirth, dateOfAdmission,
-      vaccinations, allergies
-    } = req.body;
+  name, age, gender, dateOfBirth, dateOfAdmission,
+  vaccinations, allergies,
+  principalName, principalPhone, principalLocation
+} = req.body;
+
+
+
 
     const image = req.file ? `/uploads/${req.file.filename}` : '';
 
     const child = await Child.create({
-      name,
-      age,
-      gender,
-      dateOfBirth,
-      dateOfAdmission,
-      health: {
-        vaccinations,
-        allergies
-      },
-      image
-    });
+  name,
+  age,
+  gender,
+  dateOfBirth,
+  dateOfAdmission,
+  health: { vaccinations, allergies },
+  principalName,
+  principalPhone,
+  principalLocation,
+  image
+});
 
     res.status(201).json({ message: 'Child created successfully.', child });
   } catch (err) {
@@ -59,10 +63,14 @@ exports.updateChild = async (req, res) => {
     if (!child) return res.status(404).json({ message: 'Child not found' });
 
     // Extract updated fields from body
+    
+ 
+
     const {
-      name, age, gender, dateOfBirth, dateOfAdmission,
-      vaccinations, allergies
-    } = req.body;
+  name, age, gender, dateOfBirth, dateOfAdmission,
+  vaccinations, allergies,
+  principalName, principalPhone, principalLocation
+} = req.body;
     console.log(req.body)
 
     // Handle image update (optional)
@@ -72,14 +80,19 @@ exports.updateChild = async (req, res) => {
     }
 
     // Update child
+ 
+
     child.name = name;
-    child.age = age;
-    child.gender = gender;
-    child.dateOfBirth = dateOfBirth;
-    child.dateOfAdmission = dateOfAdmission;
-    child.health.vaccinations = vaccinations;
-    child.health.allergies = allergies;
-    child.image = updatedImage;
+child.age = age;
+child.gender = gender;
+child.dateOfBirth = dateOfBirth;
+child.dateOfAdmission = dateOfAdmission;
+child.health.vaccinations = vaccinations;
+child.health.allergies = allergies;
+child.principalName = principalName;
+child.principalPhone = principalPhone;
+child.principalLocation = principalLocation;
+child.image = updatedImage;
 
     await child.save();
 

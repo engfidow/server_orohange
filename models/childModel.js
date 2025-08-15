@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const childSchema = new mongoose.Schema({
   name: { type: String, required: true },
- 
   gender: { type: String, enum: ['male', 'female', 'other'], required: true },
   dateOfBirth: { type: Date, required: true },
   dateOfAdmission: { type: Date, required: true },
@@ -10,6 +9,9 @@ const childSchema = new mongoose.Schema({
     vaccinations: { type: String, default: '' },
     allergies: { type: String, default: '' }
   },
+  principalName: { type: String, default: '' },
+  principalPhone: { type: String, default: '' },
+  principalLocation: { type: String, default: '' },
   image: { type: String }
 }, { timestamps: true });
 
