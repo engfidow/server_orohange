@@ -1,11 +1,12 @@
 const Child = require('../models/childModel');
 const Staff = require('../models/staffModel');
 const Donation = require('../models/donationModel');
-
+const User = require('../models/userModel');
 exports.getDashboardStats = async (req, res) => {
   try {
     const childrenCount = await Child.countDocuments();
     const staffCount = await Staff.countDocuments();
+    const userCount = await User.countDocuments({ role: 'user' });
 
     // Default aggregation
     const totalDonationsAllTime = await Donation.aggregate([{ $group: { _id: null, total: { $sum: '$amount' } } }]);
@@ -37,6 +38,7 @@ exports.getDashboardStats = async (req, res) => {
     res.status(200).json({
       childrenCount,
       staffCount,
+      userCount,
       totalDonations: totalDonationsAllTime[0]?.total || 0,
       donationsThisWeek: weekDonations[0]?.total || 0,
       donationsThisMonth: monthDonations[0]?.total || 0,
